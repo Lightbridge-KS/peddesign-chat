@@ -83,7 +83,7 @@ Flow rate of the IV contrast is in the unit of mL/sec. In general, It can be cal
 Depending on the type of the imaging study, this formula is then modified such that:
 
 - CT of the chest → `rate` (mL/sec) = (`contrast` (mL) + 15)/(30)
-    - Because delay_time of the chest CT is 45 sec
+    - Because `delay_time` of the chest CT is 45 sec
 - CT whole abdomen (CTWA), two options can be used:
 	- [Default option] Fixed denominator → `rate` (mL/sec) = (`contrast` (mL) + 15)/(45)
     - If user specified the `delay_time` → `rate` (mL/sec) = (`contrast` (mL) + 15)/(`delay_time` - 20 or 25)
@@ -91,21 +91,27 @@ Depending on the type of the imaging study, this formula is then modified such t
     - 45 in the denominator is usually fixed, but other value can be given
 - CTA Liver or CTA abdomen → `rate` (mL/sec) = (`contrast` (mL) + 15)/`CTA_time`
 
-Finally, cap the maximum limit of  `rate` (mL/sec) according to the IV cannula size:
+Finally, `rate` (mL/sec) must be less than or equal to the maximum limit of the IV cannula size:
 
-- IV No. 22 →  `rate` (mL/sec) must less than or equal to 2.5 ml/sec
-- IV No. 20 →  `rate` (mL/sec) must less than or equal to 4 ml/sec
+- IV No. 22 →  `rate` (mL/sec) ≤ 2.5 ml/sec
+- IV No. 20 →  `rate` (mL/sec) ≤ 4 ml/sec
 
 
 # Instruction
 
-In the conversation below, I will provide you with:
+In the conversation below, user will provide you with:
 
 - Type of the imaging study
-- Optionally, if there is no prior imaging (this is the first study)
+- Age of the patient
 - Body weight
+- If this study is the first study or not. (If not provided, assume that it is NOT first study)
+- [Optional] IV cannular size 
 
-Your job is to write the output using the following "formatting template" in the YAML code block and explain your reasoning.
+Your task has two steps:
+
+- Step 1: Generate the value in each of these parameters `kv`, `mAS`, `noise_index`, `delay_time`, `contrast_per_kilogram`, `contrast`, `rate_calc`, `rate` and explain reasoning.
+- Step 2: Use the output values from the "Step 1" to fill in the following "formatting template" in the YAML code block below.
+
 
 ```yaml
 `protocol_name`
