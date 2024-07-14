@@ -15,7 +15,8 @@ if not os.getenv("ANTHROPIC_API_KEY"):
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 system_prompt = read_markdown_file("prompt/peddesign-prompt.md")
-model_name = "claude-3-haiku-20240307"
+model_name = {"haiku": "claude-3-haiku-20240307",
+              "sonnet": "claude-3-5-sonnet-20240620"}
 
 
 # print(os.getcwd())
@@ -120,7 +121,7 @@ class State(rx.State):
 
         # Start a new session to answer the question.
         session = client.messages.create(
-            model=model_name,
+            model=model_name["sonnet"],
             max_tokens=2000,
             temperature=0.0,
             system=system_prompt,   
